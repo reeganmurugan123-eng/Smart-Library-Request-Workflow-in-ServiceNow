@@ -1,0 +1,198 @@
+smart-library-servicenow/
+│
+├── README.md
+├── catalog/
+│   └── library_request_item.json
+├── flows/
+│   └── library_request_flow.json
+├── scripts/
+│   ├── checkAvailability.js
+│   ├── autoApproval.js
+│   └── routingLogic.js
+├── business_rules/
+│   └── setPriority.js
+└── ui_policies/
+    └── dynamicFields.json
+# Smart Library Request Workflow (ServiceNow)
+
+This project implements a Smart Library Request system in ServiceNow using:
+
+* Service Catalog
+* Flow Designer
+* Business Rules
+* Script Includes
+
+## Features
+
+* Automated request routing
+* Smart approval system
+* Book availability check
+* Task creation for fulfillment
+* Notifications
+
+## Workflow
+
+1. User submits request
+2. System checks availability
+3. Auto-approval or manager approval
+4. Task assignment
+5. User notified
+
+## Requirements
+
+* ServiceNow instance (Rome+)
+* Flow Designer enabled
+
+## Author
+
+Your Name
+{
+  "name": "Library Request",
+  "table": "sc_req_item",
+  "variables": [
+    {
+      "name": "resource_type",
+      "type": "choice",
+      "choices": ["Book", "Journal", "eBook"]
+    },
+    {
+      "name": "title",
+      "type": "string"
+    },
+    {
+      "name": "author",
+      "type": "string"
+    },
+    {
+      "name": "urgency",
+      "type": "choice",
+      "choices": ["Low", "Medium", "High"]
+    },
+    {
+      "name": "justification",
+      "type": "string"
+    }
+  ]
+}
+Flow Designer Logic (library_request_flow.json)
+{
+  "flow_name": "Smart Library Request Flow",
+  "trigger": "Catalog Item Requested",
+  "steps": [
+    {
+      "name": "Check Availability",
+      "action": "Script",
+      "script": "checkAvailability"
+    },
+    {
+      "name": "Decision",
+      "type": "If",
+      "condition": "available == true"
+    },
+    {
+      "name": "Assign Librarian Task",
+      "action": "Create Task"
+    },
+    {
+      "name": "Else - Approval",
+      "action": "Ask for Approval"
+    },
+    {
+      "name": "Create Procurement Task",
+      "action": "Create Task"
+    },
+    {
+      "name": "Notify User",
+      "action": "Send Notification"
+    }
+  ]
+}
+🧠 Script Include – Availability Check
+
+📁 scripts/checkAvailability.js
+
+var LibraryUtils = Class.create();
+LibraryUtils.prototype = {
+    initialize: function() {},
+
+    checkAvailability: function(title) {
+        var gr = new GlideRecord('cmdb_ci_book');
+        gr.addQuery('name', title);
+        gr.query();
+
+        if (gr.next()) {
+            return true;
+        }
+        return false;
+    },
+
+    type: 'LibraryUtils'
+};
+🤖 Auto Approval Logic
+
+📁 scripts/autoApproval.js
+
+function autoApprove(request) {
+    if (request.cost < 1000) {
+        return true;
+    }
+    return false;
+}
+🔀 Routing Logic
+
+📁 scripts/routingLogic.js
+
+function routeRequest(type) {
+    switch(type) {
+        case 'Book':
+            return 'Librarian Team';
+        case 'Journal':
+            return 'Research Team';
+        case 'eBook':
+            return 'Digital Access Team';
+        default:
+            return 'General Library Team';
+    }
+}
+⚡ Business Rule – Set Priority
+
+📁 business_rules/setPriority.js
+
+(function executeRule(current, previous) {
+
+    if (current.variables.urgency == 'High') {
+        current.priority = 1;
+    } else if (current.variables.urgency == 'Medium') {
+        current.priority = 2;
+    } else {
+        current.priority = 3;
+    }
+
+})(current, previous);
+🎛️ UI Policy (dynamicFields.json)
+{
+  "policy": "Show justification if urgency is High",
+  "conditions": [
+    {
+      "field": "urgency",
+      "value": "High"
+    }
+  ],
+  "actions": [
+    {
+      "field": "justification",
+      "visible": true,
+      "mandatory": true
+    }
+  ]
+}
+🚀 How to Upload to GitHub
+
+Create a repo:
+
+git init
+git add .
+git commit -m "Initial commit - Smart Library Workflow"
+git branch -M main
+git remote add origin <your-repo-url>
+git push -u origin main

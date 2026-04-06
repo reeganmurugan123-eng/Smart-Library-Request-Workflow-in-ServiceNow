@@ -1,0 +1,77 @@
+1. Request Initiation (Service Catalog)
+Users access a Library Request Form via the Service Catalog.
+They input:
+Resource type (book, journal, eBook, research paper)
+Title / author
+Urgency level
+Justification (academic, research, personal)
+Optional: attach documents or references.
+
+👉 Built using:
+
+Catalog Item
+Variables (dropdowns, text fields, attachments)
+⚙️ 2. Smart Routing Logic
+
+The “smart” part comes from automation and conditions:
+
+Auto-categorization based on request type
+Routing rules such as:
+Academic requests → Librarian Team A
+Research journals → Digital Access Team
+Priority auto-assigned based on urgency
+
+👉 Implemented using:
+
+Flow Designer / Workflow Editor
+Decision tables or business rules
+✅ 3. Approval Process
+Conditional approvals:
+Low-cost/free items → auto-approved
+Expensive purchases → manager or finance approval
+Multi-level approvals possible
+
+👉 Features used:
+
+Approval actions in Flow Designer
+Dynamic approvers (based on department, role)
+📦 4. Fulfillment Task Creation
+Tasks automatically generated for:
+Procurement team (buy book)
+Librarian (locate existing copy)
+IT team (grant digital access)
+SLA timers can be applied for each task
+📢 5. Notifications & Updates
+Automated alerts via:
+Email
+Mobile app notifications
+Status updates like:
+“Request Received”
+“Approved”
+“Ready for Pickup / Access Granted”
+📊 6. Smart Enhancements (Advanced)
+
+To make it “smart,” you can add:
+
+🤖 AI & Automation
+Suggest existing books before approving purchase
+Auto-recommend similar resources
+Predict demand trends
+🔍 Knowledge Integration
+Link requests to knowledge articles
+Suggest self-service solutions
+📈 Analytics Dashboard
+Most requested books
+Average fulfillment time
+Budget tracking
+🧩 7. Closure & Feedback
+Request marked complete after fulfillment
+User feedback survey triggered
+Ratings stored for service improvement
+🏗️ Example Flow (Simple)
+User submits request
+System checks availability
+If available → assign librarian
+If not available → send for approval
+Upon approval → procurement task
+Notify user when ready
